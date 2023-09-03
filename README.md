@@ -6,51 +6,46 @@ This repository offers a deep dive into quadrotor attitude determination using a
 
 ### Quadrotor Attitude Estimation using 6-axis IMU Data
 
-This project zeroes in on determining the attitude of a quadrotor accurately through data sourced from a 6-axis Inertial Measurement Unit (IMU). The IMU is pivotal, providing crucial acceleration and angular rate readings. The foundational data for this project is extracted from the renowned EuRoc dataset by ETH Zurich.
+# Quadrotor Attitude Estimation using 6-axis IMU Data
+
+## Introduction
+This project centers on determining the attitude of a quadrotor accurately through data sourced from a 6-axis Inertial Measurement Unit (IMU). The IMU is pivotal, providing essential acceleration and angular rate readings. The foundational data for this project is a subset of the renowned EuRoc dataset by ETH Zurich.
 
 ## Code Framework
 Outlined below is the code structure:
-
 - **setup.py**: Initializes package installations.
-- **project package**:
-  - **util**: Hosts unit tests.
-  - **dataset**: Features a subset of the EuRoc dataset, emphasizing IMU data.
-  - **code**: Encompasses core code files and sandbox files integral to this initiative.
+- **proj2 1 package**:
+  - **util**: Houses unit tests.
+  - **dataset**: Contains a snippet of the EuRoc dataset, majorly focusing on IMU data.
+  - **code**: Houses core code files and sandbox files vital to this project.
 
-Within this structure, the **complementary filter.py** is architectured to contain the complementary filter algorithm logic. The algorithm's efficiency is reflected through a plotting mechanism that processes vast IMU readings.
+The **complementary filter.py** is crafted to contain the logic for the complementary filter algorithm. The algorithm's efficiency is evident through a plotting procedure that processes extensive IMU readings.
 
 ## Algorithm Details and Formulas
+At the core of this endeavor is the complementary filter algorithm:
 
-Central to this endeavor is the complementary filter algorithm, detailed as follows:
-
-1. **Initialization**: Start with an initial rotation estimate presented as a `scipy.spatial.transform.Rotation` object.
+1. **Initialization**: Kickstart with an initial rotation estimate, which is a `scipy.spatial.transform.Rotation` object.
+2. **Inputs**: For every update, the filter needs:
+   - Two 3x1 vectors that showcase angular velocity and the measured acceleration.
+   - The time duration of that specific interval.
+3. **Quaternion Adjustments**: The Rotation class details quaternions as (x, y, z, w) which is a change from the traditional (w, x, y, z) sequence.
+4. **Gravity Alignment**: The data denotes the IMU's x-axis is more aligned with gravitational force than the z-axis. This demands a tweak in the quaternion build to get the rotation correction termed as `q_acc`.
+5. **Normalization**: Acceleration measurements being in m/s^2, normalization becomes a vital step for precise attitude estimation.
+6. **Rotation Estimation**: The main formula for the complementary filter update function is:
    
-2. **Inputs**: Each update requires:
-   - Two 3x1 vectors signifying the angular velocity and measured acceleration.
-   - Duration of the interval.
-
-3. **Quaternion Adjustments**: The Rotation class formats quaternions as (x, y, z, w), distinguishing it from the traditional (w, x, y, z) sequence.
-
-4. **Gravity Alignment**: Data indicates the IMU's x-axis aligning more with gravitational force than the z-axis, necessitating a quaternion adjustment to derive the rotation correction `q_acc`.
-
-5. **Normalization**: Given acceleration measurements in m/s^2, normalization is crucial for accurate attitude inference.
-
-6. **Rotation Estimation**: Central to the complementary filter update function is:
-
-\[ R_{new} = R_{old} \times q_{\omega} \times (1-\alpha) + R_{old} \times q_{acc} \times \alpha \]
+   R_new = R_old * q_w * (1-alpha) + R_old * q_acc * alpha
 
 Where:
-   - \( R_{new} \) and \( R_{old} \) are the new and previous rotation matrices.
-   - \( q_{\omega} \) is the quaternion rotation from angular velocities.
-   - \( q_{acc} \) is the quaternion rotation from acceleration.
-   - \( \alpha \) is the complementary filter blending element.
+   - R_new and R_old signify the new and previous rotation matrices respectively.
+   - q_w is the quaternion rotation derived from angular velocities.
+   - q_acc is the quaternion rotation courtesy of acceleration.
+   - alpha stands for the complementary filter blending element.
+7. **Rodrigues Formula Link**: The project ventures into the tie-up between quaternions and the Rodrigues Formula. Explicitly, the formula given is:
 
-7. **Rodrigues Formula Connection**: The project dives into the connection between quaternions and the Rodrigues Formula. Specifically:
+   H(u_0, u) = (u_0^2 - uT * u)I + 2u_0 * u_hat + 2u * uT
 
-\[ H(u_0, u) = (u_0^2 - u^T u) I + 2 u_0 \hat{u} + 2 u u^T \]
+This has been derived to equate the Rodrigues Formula, thus connecting the two rotation representations.
 
-Established as equivalent to the Rodrigues Formula, this interlinks the two rotation expressions.
-
-## Concluding Remarks
-Throughout this project, utmost care and precision were maintained, ensuring authentic outcomes and a deep-rooted grasp of quadrotor attitude estimation.
+## Final Remarks
+Throughout the project's duration, undivided attention and precision were the norms, ensuring genuine results and a comprehensive understanding of quadrotor attitude estimation.
 
