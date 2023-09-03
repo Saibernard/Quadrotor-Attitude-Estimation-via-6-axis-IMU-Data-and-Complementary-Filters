@@ -6,9 +6,6 @@ This repository offers a deep dive into quadrotor attitude determination using a
 
 ### Quadrotor Attitude Estimation using 6-axis IMU Data
 
-# Quadrotor Attitude Estimation using 6-axis IMU Data
-
-## Introduction
 This project centers on determining the attitude of a quadrotor accurately through data sourced from a 6-axis Inertial Measurement Unit (IMU). The IMU is pivotal, providing essential acceleration and angular rate readings. The foundational data for this project is a subset of the renowned EuRoc dataset by ETH Zurich.
 
 ## Code Framework
